@@ -1,14 +1,17 @@
 import { NextFunction, Request, Response } from "express"
-import { IRegister, Registers } from "../models/register";
+import { IRegister } from "../models/interfaces/iRegister";
+import { Register } from "../models/register";
+import { createRegisterSchema, registerIdSchema, updateRegisterSchema } from "../lib/validations/registerSchema";
 
-export const createRegister = (req: Request, res: Response, next: NextFunction) => {
+export const createRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name } = req.body;
-        const id = Registers.length + 1;
+        const validation = createRegisterSchema.safeParse(req.body);
+        if (!validation.success) {
+            res.status(400).json({ message: validation.error })
+            return;
+        }
 
-        const newRegister: IRegister = { id: id.toString(), name, active: true };
-
-        Registers.push(newRegister);
+        const newRegister: Register = await Register.create({ firstname: validation.data.firstname, active: true });
 
         res.status(201).json({ message: "Successfull POST", register: newRegister });
     } catch (err) {
@@ -17,11 +20,16 @@ export const createRegister = (req: Request, res: Response, next: NextFunction) 
     }
 }
 
-export const getRegister = (req: Request, res: Response, next: NextFunction) => {
+export const getRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const searchId = req.params.id;
+        const validation = registerIdSchema.safeParse(req.params.id);
+        if (!validation.success) {
+            res.status(400).json({ message: validation.error })
+            return;
+        }
+        const searchId = validation.data;
 
-        const register = Registers.find((element: IRegister) => element.id == searchId);
+        const register = await Register.findByPk(searchId);
         if (!register) {
             res.status(400).json({ message: "No Register found with that id." })
             return;
@@ -34,11 +42,11 @@ export const getRegister = (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-export const getAllRegisters = (req: Request, res: Response, next: NextFunction) => {
+export const getAllRegisters = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const registers = Registers;
-        if (!registers) {
-            res.status(500).json({ message: "Not an existing Registers array." })
+        const registers = await Register.findAll({ where: { active: true } });
+        if (!registers || registers.length === 0) {
+            res.status(400).json({ message: "None existing Registers." })
             return;
         };
 
@@ -49,43 +57,54 @@ export const getAllRegisters = (req: Request, res: Response, next: NextFunction)
     }
 }
 
-export const updateRegister = (req: Request, res: Response, next: NextFunction) => {
+export const updateRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newRegister: IRegister = req.body;
-        if (!newRegister) res.status(400).json({ message: "Missing body" });
+        const validation = updateRegisterSchema.safeParse(req.params.id);
+        if (!validation.success) {
+            res.status(400).json({ message: validation.error })
+            return;
+        }
+        
+        const newRegister: IRegister = {...validation.data, active: validation.data.active || true};
 
-        const index = Registers.findIndex((element: IRegister) => element.id === newRegister.id)
-        if (index === -1) {
+        if (!newRegister || !newRegister.id) res.status(400).json({ message: "Missing body" });
+
+        const register = await Register.findByPk(newRegister.id);
+        if (!register) {
             res.status(400).json({ message: "No Register found with that id." })
             return;
         };
 
-        Registers[index] = newRegister;
+        register.firstname = newRegister.firstname;
+        register.active = newRegister.active;
+        await register.save();
 
-        res.status(200).json({ message: "Successfull PUT", register: newRegister });
+        res.status(200).json({ message: "Successfull PUT", register });
     } catch (err) {
         console.error(err);
         next(err);
     }
 }
 
-export const deleteRegister = (req: Request, res: Response, next: NextFunction) => {
+export const deleteRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const searchId = req.params.id;
-        if (!searchId) {
-            res.status(400).json({ message: "Missing id" })
+        const validation = registerIdSchema.safeParse(req.params.id);
+        if (!validation.success) {
+            res.status(400).json({ message: validation.error })
             return;
-        };
+        }
+        const searchId = validation.data;
 
-        const index = Registers.findIndex((element: IRegister) => element.id === searchId)
-        if (index === -1) {
+        const register = await Register.findByPk(searchId);
+        if (!register) {
             res.status(400).json({ message: "No Register found with that id." })
             return;
         };
 
-        Registers[index].active = false;
+        register.active = false;
+        await register.save();
 
-        res.status(200).json({ message: "Successfull DELETE", register: Registers[index] });
+        res.status(200).json({ message: "Successfull DELETE" });
     } catch (err) {
         console.error(err);
         next(err);
