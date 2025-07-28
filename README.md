@@ -105,6 +105,43 @@ auth: Local Authentication emulator running at http://localhost:9099/
 
 ---
 
+## 🔑 Firebase Admin SDK Private Key Setup
+
+To initialize Firebase Admin SDK:
+
+1. Go to [Firebase Console → Project Settings → Service accounts](https://console.firebase.google.com/).
+2. Click **Generate new private key** under the **Firebase Admin SDK** section.
+3. Save the `.json` file securely (e.g. `API-PKey.json` in the root folder).
+4. Add this environment variable to your `.env` file:
+
+```env
+FIREBASE_CREDENTIALS="./API-PKey.json"
+```
+
+5. In your code (e.g. `firebase.ts`), initialize Firebase like this:
+
+```ts
+import admin from 'firebase-admin';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config();
+
+admin.initializeApp({
+  credential: admin.credential.cert(
+    require(path.resolve(__dirname, '..', process.env.FIREBASE_CREDENTIALS || ''))
+  ),
+});
+```
+
+When using the emulator locally, it will automatically use:
+
+```ts
+process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
+```
+
+---
+
 ## 🌐 Environment Variables
 
 Create a `.env` file in the root of your project with the following content:
@@ -135,6 +172,16 @@ npm run lint      # Lint TypeScript code
 ```
 
 ---
+
+## Security
+
+**Never commit `API-PKey.json` or `.env` to version control.**
+Use `.gitignore` to exclude them:
+
+```
+.env
+API-PKey.json
+```
 
 ## 🧼 Code Formatting
 
