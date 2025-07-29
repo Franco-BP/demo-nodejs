@@ -1,15 +1,10 @@
-Here's a complete `README.md` file in Markdown format that explains all the requested steps and includes technology listing based on your `package.json`:
-
----
-
-````md
-# 🚀 Node.js Backend with Firebase Emulator & PostgreSQL
+# Node.js Backend with Firebase Emulator & PostgreSQL
 
 This project is a Node.js backend built with TypeScript, Express, Sequelize, and Firebase Authentication Emulator for local development and testing.
 
 ---
 
-## 🧰 Technologies Used
+## Technologies Used
 
 **Runtime Dependencies**
 - `express` — Web server framework
@@ -31,7 +26,7 @@ This project is a Node.js backend built with TypeScript, Express, Sequelize, and
 
 ---
 
-## 📦 Install Dependencies
+## Install Dependencies
 
 ```bash
 npm install
@@ -41,7 +36,7 @@ This command installs all required packages listed in `package.json`.
 
 ---
 
-## 🛠️ Database Setup
+## Database Setup
 
 This project uses PostgreSQL. To initialize the database schema:
 
@@ -63,7 +58,7 @@ psql postgres://user:pass@localhost:5432/dbname -f scripts/databaseCreation.sql
 
 ---
 
-## 🔐 Firebase Authentication Emulator
+## Firebase Authentication Emulator
 
 ### 1. Install Firebase CLI
 
@@ -105,7 +100,7 @@ auth: Local Authentication emulator running at http://localhost:9099/
 
 ---
 
-## 🔑 Firebase Admin SDK Private Key Setup
+## Firebase Admin SDK Private Key Setup
 
 To initialize Firebase Admin SDK:
 
@@ -142,7 +137,7 @@ process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
 
 ---
 
-## 🌐 Environment Variables
+## Environment Variables
 
 Create a `.env` file in the root of your project with the following content:
 
@@ -162,7 +157,7 @@ FIREBASE_AUTH_EMULATOR_HOST="localhost:9099"
 
 ---
 
-## 🧪 Development Scripts
+## Development Scripts
 
 ```bash
 npm run dev       # Start server with ts-node and hot reload
@@ -183,7 +178,7 @@ Use `.gitignore` to exclude them:
 API-PKey.json
 ```
 
-## 🧼 Code Formatting
+## Code Formatting
 
 Run ESLint:
 
