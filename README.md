@@ -7,22 +7,22 @@ This project is a Node.js backend built with TypeScript, Express, Sequelize, and
 ## Technologies Used
 
 **Runtime Dependencies**
-- `express` — Web server framework
-- `sequelize` — ORM for SQL databases
-- `pg` — PostgreSQL client for Node.js
-- `pg-hstore` — Required by Sequelize for PostgreSQL
-- `sqlite3` — Optional local DB (used by Sequelize)
-- `firebase-admin` — Firebase Admin SDK to verify ID tokens and manage users
-- `zod` — Schema validation
+- `express` _v 5.1.0_ — Web server framework
+- `sequelize` _v 6.37.7_ — ORM for SQL databases
+- `pg` _v 8.16.3_ — PostgreSQL client for Node.js
+- `pg-hstore` _v 2.3.4_ — Required by Sequelize for PostgreSQL
+- `sqlite3` _v 5.1.7_ — Optional local DB (used by Sequelize)
+- `firebase-admin` _v 13.4.0_ — Firebase Admin SDK to verify ID tokens and manage users
+- `zod` _v 4.0.9_ — Schema validation
 
 **Development Dependencies**
-- `typescript` — Static typing for JavaScript
-- `ts-node` — Runs TypeScript files directly
-- `nodemon` — Hot-reload for development
-- `eslint` — Linter for code quality
-- `prettier` — Code formatter
-- `dotenv` — Load environment variables from `.env`
-- `@types/express`, `@types/node` — TypeScript type definitions
+- `typescript` _v 5.8.3_ — Static typing for JavaScript
+- `ts-node` _v 10.9.2_ — Runs TypeScript files directly
+- `nodemon` _v 3.1.10_ — Hot-reload for development
+- `eslint` _v 9.31.0_ — Linter for code quality
+- `prettier` _v 3.6.2_ — Code formatter
+- `dotenv` _v 17.2.1_ — Load environment variables from `.env`
+- `@types/express` _v 5.0.3_, `@types/node` _v 24.1.0_ — TypeScript type definitions
 
 ---
 
